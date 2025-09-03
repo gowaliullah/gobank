@@ -48,7 +48,18 @@ func (s *APIServer) Run() {
 }
 
 func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
-	return nil
+
+	if r.Method == http.MethodGet {
+		return s.handleGetAccount(w, r)
+	}
+	if r.Method == http.MethodPost {
+		return s.handleCreateAccount(w, r)
+	}
+	if r.Method == http.MethodDelete {
+		return s.handleDeleteAccount(w, r)
+	}
+
+	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
 func (s *APIServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
