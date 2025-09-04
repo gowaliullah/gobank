@@ -1,6 +1,19 @@
 package main
 
+import (
+	"fmt"
+	"log"
+)
+
 func main() {
-	server := NewAPIServer(":8080")
-	server.Run()
+
+	store, err := NewPostgresStore()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Postgres store initialized: %+v\n", store)
+
+	// server := NewAPIServer(":8080", store)
+	// server.Run()
 }
