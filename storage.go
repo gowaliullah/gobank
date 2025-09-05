@@ -1,6 +1,10 @@
 package main
 
-import "database/sql"
+import (
+	"database/sql"
+
+	_ "github.com/lib/pq"
+)
 
 type Storage interface {
 	CreateAccount(*Account) error
@@ -25,6 +29,25 @@ func NewPostgresStore() (*PostgresStore, error) {
 	}
 
 	return &PostgresStore{db: db}, nil
+}
+
+func (s *PostgresStore) Init() error {
+	return s.createAccountTable()
+}
+
+func (s *PostgresStore) createAccountTable() error {
+	query := `CREATE TABLE if NOT EXISTS accounts (
+		id SERIAL PRIMARY KEY,
+		first_name VARCHAR(50),
+		last_name VARCHAR(50),
+		number serial,
+		balance,
+		created_at TIMESTAMP
+ )`
+
+	_, err := s.db.Exec(query)
+	return err
+
 }
 
 func (s *PostgresStore) CreateAccount(*Account) error {
